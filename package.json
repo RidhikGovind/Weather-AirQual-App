@@ -1,0 +1,18 @@
+{
+  "name": "dataselfieapp",
+  "version": "1.0.0",
+  "description": "node.js app",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Ridhik Govind",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
