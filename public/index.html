@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data selfie app</title>
+    <style>
+        .submit-btn {
+            padding: 3px;
+            font-size: 12px;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,39 +23,46 @@
         <div>Latitude: <span class="lat"></span>&deg; </div>
         <div>Longitude: <span class="long"></span>&deg;</div>
     </div>
+    <button class="submit-btn">SUBMIT</button>
 
     <script>
+        const submitBtn = document.querySelector('.submit-btn');
 
 
-        if ('geolocation' in navigator) {
-            console.log("geolocation available");
-            //getting the coords using geolocation
-            navigator.geolocation.getCurrentPosition(async position => {
-                //storing coords into lat and long
-                const lat = position.coords.latitude;
-                const long = position.coords.longitude;
+        submitBtn.addEventListener('click', () => {
+            if ('geolocation' in navigator) {
+                console.log("geolocation available");
+                //getting the coords using geolocation
+                navigator.geolocation.getCurrentPosition(async position => {
+                    //storing coords into lat and long
+                    const lat = position.coords.latitude;
+                    const long = position.coords.longitude;
 
-                document.querySelector('.lat').textContent = lat;
-                document.querySelector('.long').textContent = long
+                    document.querySelector('.lat').textContent = lat;
+                    document.querySelector('.long').textContent = long
 
-                const data = { lat, long }; //store the lat and long
-                const options = {  //describing the type of method,header and body type
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data) //converting JS string into JSON 
-                }
-                //make a fetch() [POSTING] to the /api endpoint
-                const response = await fetch('/api', options);
-                const json = await response.json();
-                console.log(json)
+                    const data = { lat, long }; //store the lat and long
+                    const options = {  //describing the type of method,header and body type
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data) //converting JS string into JSON 
+                    }
 
-            });
-        } else {
-            console.log("geolocation isnt available")
-        }
 
+                    //make a fetch() [POSTING] to the /api endpoint
+                    const response = await fetch('/api', options);
+                    const json = await response.json();
+                    console.log(json);
+
+
+
+                });
+            } else {
+                console.log("geolocation isnt available")
+            }
+        });
 
 
 
