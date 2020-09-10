@@ -5,29 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        p {
+            padding: 10px;
+            background-color: lightskyblue;
+            border-radius: 10px;
+            
+        }
+    </style>
 </head>
 
 <body>
     <h1>Data Selfie appp</h1>
     <script>
-        //this here involves making a request to get all the data from the database and display it on the web page.
         async function getData() {
-            const response = await fetch('/api');
+            const response = await fetch('/database');
             const data = await response.json();
 
             for (item of data) {
-                const div = document.createElement('div');
-                const mood = document.createElement('div');
+                const p = document.createElement('p');
+
                 const coords = document.createElement('div');
                 const date = document.createElement('div');
 
-                mood.textContent = `mood: ${item.mood}`;
+
                 coords.textContent = `Coordinates: ${item.lat},${item.long}`;
                 dateString = new Date();
                 date.textContent = dateString.toLocaleDateString();
 
-                div.append(mood, coords, date);
-                document.body.append(div);
+                p.append(coords, date);
+                document.body.append(p);
             }
             console.log(data);
         }

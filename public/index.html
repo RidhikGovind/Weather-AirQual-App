@@ -6,7 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data selfie app</title>
     <style>
-        .submit-btn {
+        .coords {
+            padding: 15px;
+            width: fit-content;
+            background-color: lightblue;
+            border-radius: 10px;
+            margin: 10px;
+        }
+
+        .checkin {
             padding: 3px;
             font-size: 12px;
             margin-top: 40px;
@@ -23,59 +31,70 @@
         <div>Latitude: <span class="lat"></span>&deg; </div>
         <div>Longitude: <span class="long"></span>&deg;</div>
     </div>
-    <form>
-        <input class="userInput" type="text" placeholder="Enter your mood">
-        <button class="submit-btn">SUBMIT</button>
-
-    </form>
+    <div class="dbentries">
+        <a href="anotherindex.html">Database entries</a>
+    </div>
+    <button class="checkin">Check in</button>
 
 
     <script>
 
-        const form = document.querySelector('form');
-        const formInput = document.querySelector('.userInput');
+        const checkinbtn = document.querySelector('.checkin');
+
+        let lat, long;
 
 
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if ('geolocation' in navigator) {
-                const mood = formInput.value;
-                console.log(mood);
-                console.log("geolocation available");
-                //getting the coords using geolocation
-                navigator.geolocation.getCurrentPosition(async position => {
-                    //storing coords into lat and long
-                    const lat = position.coords.latitude;
-                    const long = position.coords.longitude;
+        if ('geolocation' in navigator) {
 
-                    document.querySelector('.lat').textContent = lat;
-                    document.querySelector('.long').textContent = long
+            console.log("geolocation available");
 
-                    const data = { lat, long, mood }; //store the lat and long and formInput
-                    const options = {  //describing the type of method,header and body type
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data) //converting JS string into JSON 
-                    }
+            navigator.geolocation.getCurrentPosition(async position => {
+
+                lat = position.coords.latitude;
+                long = position.coords.longitude;
+                document.querySelector('.lat').textContent = lat;
+                document.querySelector('.long').textContent = long;
 
 
-                    //make a fetch() [POSTING] to the /api endpoint
-                    const response = await fetch('/api', options);
-                    const json = await response.json();
-                    console.log(json);
+                const API_KEY = '2a25732c5741a2fd2f2b0de7f847f36d'
+                const api_url = `weather/${lat},${long},${API_KEY}`
+
+
+                //***proxy server endpoint works*** 
+                //const api_url = '/weather'
+
+                const api_response = await fetch(api_url);
+                const api_data = await api_response.json();
+                console.log(api_data);
 
 
 
 
 
-                });
-            } else {
-                console.log("geolocation isnt available")
+
+            });
+        } else {
+            console.log("geolocation isnt available")
+        }
+
+
+        checkinbtn.addEventListener('click', async event => {
+            const data = { lat, long };
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
             }
-        });
+
+
+            //make a fetch() [POSTING] to the /api endpoint
+            const response = await fetch('/api', options);
+            const json = await response.json();
+            console.log(json);
+        })
 
 
 
