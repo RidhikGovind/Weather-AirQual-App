@@ -10,30 +10,33 @@
             padding: 10px;
             background-color: lightskyblue;
             border-radius: 10px;
-            
+
         }
     </style>
 </head>
 
 <body>
     <h1>Data Selfie appp</h1>
+    <h5>*Dont forget to refresh*</h5>
     <script>
         async function getData() {
             const response = await fetch('/database');
             const data = await response.json();
+
 
             for (item of data) {
                 const p = document.createElement('p');
 
                 const coords = document.createElement('div');
                 const date = document.createElement('div');
-
+                const time = document.createElement('div')
 
                 coords.textContent = `Coordinates: ${item.lat},${item.long}`;
                 dateString = new Date();
                 date.textContent = dateString.toLocaleDateString();
+                time.textContent = dateString.toTimeString();
 
-                p.append(coords, date);
+                p.append(coords, date, time);
                 document.body.append(p);
             }
             console.log(data);
