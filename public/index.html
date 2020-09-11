@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data selfie app</title>
     <style>
-        .coords {
+      .weather-info {
             padding: 15px;
             width: fit-content;
             background-color: lightblue;
@@ -19,27 +19,37 @@
             font-size: 12px;
             margin-top: 40px;
         }
+
     </style>
 </head>
 
 <body>
 
 
-    <h1>Data selfie app</h1>
+    <h1>WeatherAirQual </h1>
 
-    <div class="coords">
+    <!-- <div class="coords">
         <div>Latitude: <span class="lat"></span>&deg; </div>
         <div>Longitude: <span class="long"></span>&deg;</div>
-    </div>
+    </div> -->
+
+    <p class="weather-info">The weather description at Latitude: <span class="lat"></span> and longitude: <span class="long"></span> 
+    is <span class="description"></span> with a temperature of <span class="temperature"></span>°C</p>
+
+    <p class="aq-details">The Air Quality Index(AQI) for the nearest city: <span class="city"></span> is <span class="aq-value"></span></p>
     <div class="dbentries">
         <a href="anotherindex.html">Database entries</a>
     </div>
+
+
     <button class="checkin">Check in</button>
 
 
     <script>
 
         const checkinbtn = document.querySelector('.checkin');
+        const description = document.querySelector('.description');
+        const temperature = document.querySelector('.temperature');
 
         let lat, long;
 
@@ -66,7 +76,12 @@
 
                 const api_response = await fetch(api_url);
                 const api_data = await api_response.json();
-                console.log(api_data);
+                // console.log(api_data.current.temp);
+
+                description.textContent = api_data.current.weather[0].description;
+                let celciusTemperature = api_data.current.temp - 273.15;
+                console.log(celciusTemperature);
+                temperature.textContent = celciusTemperature;
 
 
 
