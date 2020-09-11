@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data selfie app</title>
+    <title>Weather-AirQuality App</title>
     <style>
-        .weather-info,.aq-details {
+        .weather-info,
+        .aq-details {
             padding: 15px;
             width: fit-content;
             background-color: lightblue;
@@ -19,6 +20,13 @@
             font-size: 12px;
             margin-top: 40px;
         }
+
+        .error {
+            width: fit-content;
+            padding: 13px;
+            background-color: lightcoral;
+
+        }
     </style>
 </head>
 
@@ -26,7 +34,7 @@
 
 
     <h1>WeatherAirQual </h1>
-
+    <h3></h3>
     <!-- <div class="coords">
         <div>Latitude: <span class="lat"></span>&deg; </div>
         <div>Longitude: <span class="long"></span>&deg;</div>
@@ -52,6 +60,7 @@
         const description = document.querySelector('.description');
         const temperature = document.querySelector('.temperature');
 
+
         let lat, long;
 
 
@@ -61,43 +70,50 @@
             console.log("geolocation available");
 
             navigator.geolocation.getCurrentPosition(async position => {
-
-                lat = position.coords.latitude;
-                long = position.coords.longitude;
-                document.querySelector('.lat').textContent = lat;
-                document.querySelector('.long').textContent = long;
-
-
-                const API_KEY_WEATHER = '2a25732c5741a2fd2f2b0de7f847f36d'
-                const weather_url = `weather/${lat},${long},${API_KEY_WEATHER}`
+                try {
+                    lat = position.coords.latitude;
+                    long = position.coords.longitude;
+                    document.querySelector('.lat').textContent = lat;
+                    document.querySelector('.long').textContent = long;
 
 
-                //***proxy server endpoint works*** 
-                //const api_url = '/weather'
+                    const API_KEY_WEATHER = '2a25732c5741a2fd2f2b0de7f847f36d'
+                    const weather_url = `weather/${lat},${long},${API_KEY_WEATHER}`
 
-                const weather_response = await fetch(weather_url);
-                const weather_data = await weather_response.json();
-                // console.log(api_data.current.temp);
 
-                //storing and displaying the received data from the server side...
-                description.textContent = weather_data.current.weather[0].description;
-                let celciusTemperature = weather_data.current.temp - 273.15;
-                console.log(celciusTemperature.toFixed(1));
-                temperature.textContent = celciusTemperature.toFixed(1);
+                    //***proxy server endpoint works*** 
+                    //const api_url = '/weather'
 
-                //so for AQ(Air quality) just like above create route parameters in script.js and then fetch the aq_url 
-                // const API_KEY_AQ = '4a9c2e59-cf5a-49a4-a1fc-90e3803e60fb';
-                const aq_url = `/aq`;
-                const aq_response = await fetch(aq_url);
-                const aq_data = await aq_response.json();
-                console.log(aq_data);
+                    const weather_response = await fetch(weather_url);
+                    const weather_data = await weather_response.json();
+                    // console.log(api_data.current.temp);
 
-                //now store and display the aq data 
-                const city = document.querySelector('.city');
-                const aqValue = document.querySelector('.aq-value');
-                city.textContent = aq_data.data.city;
-                aqValue.textContent = aq_data.data.current.pollution.aqius;
+                    //storing and displaying the received data from the server side...
+                    description.textContent = weather_data.current.weather[0].description;
+                    let celciusTemperature = weather_data.current.temp - 273.15;
+                    console.log(celciusTemperature.toFixed(1));
+                    temperature.textContent = celciusTemperature.toFixed(1);
 
+                    //so for AQ(Air quality) just like above create route parameters in script.js and then fetch the aq_url 
+                    // const API_KEY_AQ = '4a9c2e59-cf5a-49a4-a1fc-90e3803e60fb';
+                    const aq_url = `/aq`;
+                    const aq_response = await fetch(aq_url);
+                    const aq_data = await aq_response.json();
+                    console.log(aq_data);
+
+                    //now store and display the aq data 
+                    const city = document.querySelector('.city');
+                    const aqValue = document.querySelector('.aq-value');
+                    city.textContent = aq_data.data.city;
+                    aqValue.textContent = aq_data.data.current.pollution.aqius;
+                }
+                catch (error) {
+                    const errorHead = querySelector('h3');
+                    errorHead.textContent = "Woopps ! No Infoavailable at this moment !";
+                   errorHead.className = "error"
+
+
+                }
 
 
 

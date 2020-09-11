@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express'); //mandatory statement
 const Datastore = require('nedb');
 const fetch = require('node-fetch');
@@ -47,7 +48,7 @@ app.get('/weather/:latlong', async (request, response) => {
     const lat = latlong[0];
     const long = latlong[1];
     console.log(lat, long);
-    const API_KEY_WEATHER = '2a25732c5741a2fd2f2b0de7f847f36d';
+    const API_KEY_WEATHER = process.env.API_KEY_WEATHER;
     const weather_url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&exclude=minutely,hourly,daily&appid=${API_KEY_WEATHER}`;
     //const api_url = `https://api.openweathermap.org/data/2.5/onecall?lat=10.85&lon=76.27&exclude=minutely,hourly,daily&appid=${API_KEY}`;
     const weather_response = await fetch(weather_url);
@@ -60,7 +61,7 @@ app.get('/aq', async (request, response) => {
    
   
     
-    const API_KEY_AQ = '4a9c2e59-cf5a-49a4-a1fc-90e3803e60fb';
+    const API_KEY_AQ = process.env.API_KEY_AQ;
     const aq_url = `http://api.airvisual.com/v2/nearest_city?key=${API_KEY_AQ}`;
     const aq_response = await fetch(aq_url);
     const aq_data = await aq_response.json();
