@@ -1,5 +1,5 @@
 {
-  "name": "dataselfieapp",
+  "name": "Weather-AirQual app",
   "version": "1.0.0",
   "description": "node.js app",
   "main": "script.js",
